@@ -40,6 +40,7 @@ class _HomeState extends State<Home> {
               children: [
                 //Settings button
                 Expanded(
+                  flex: 10,
                   child: Row(
                     children: [
                       Expanded(
@@ -53,6 +54,7 @@ class _HomeState extends State<Home> {
                           child: Opacity(
                             opacity: 0.6,
                             child: CircularCountDownTimer(
+                              controller: _controller,
                               width: constraints.maxWidth * 0.25,
                               height: constraints.maxHeight * 0.2,
                               duration: duration,
@@ -66,6 +68,8 @@ class _HomeState extends State<Home> {
                               ),
                               isReverse: true,
                               autoStart: false,
+                              isTimerTextShown: true,
+                              onStart: () {},
                             ),
                           ),
                         ),
@@ -77,9 +81,39 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-
+                Row(children: [
+                  _button(
+                      title: "Start",
+                      onPressed: () {
+                        _controller.resume();
+                      },
+                      myicon: Icon(Icons.play_arrow_rounded)),
+                ]),
+                Row(children: [
+                  Expanded(
+                    child: SizedBox(),
+                    flex: 1,
+                  ),
+                  _button(
+                      title: "Pause",
+                      onPressed: () {
+                        _controller.pause();
+                      },
+                      myicon: Icon(Icons.pause)),
+                  _button(
+                      title: "Restart",
+                      onPressed: () {
+                        _controller.restart(duration: duration);
+                        _controller.pause();
+                      },
+                      myicon: Icon(Icons.restart_alt)),
+                  Expanded(
+                    child: SizedBox(),
+                    flex: 1,
+                  )
+                ]),
                 Container(
-                  height: constraints.maxHeight * 0.2,
+                  height: constraints.maxHeight * 0.1,
                   child: SizedBox(),
                 )
               ],
@@ -88,5 +122,18 @@ class _HomeState extends State<Home> {
         )),
       ),
     ]);
+  }
+
+  _button(
+      {required String title, VoidCallback? onPressed, required Icon myicon}) {
+    return Expanded(
+      child: IconButton(
+        icon: myicon,
+        onPressed: onPressed,
+        color: Colors.white,
+        iconSize: 40,
+      ),
+      flex: 1,
+    );
   }
 }

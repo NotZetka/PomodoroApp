@@ -7,7 +7,7 @@ void main() {
     initialRoute: '/',
     routes: {
       '/': (context) => Home(),
-      // '/settings':(context)=>Settings(),
+      '/settings': (context) => MyApp(),
     },
   ));
 }
