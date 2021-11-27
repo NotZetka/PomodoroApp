@@ -12,10 +12,95 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   CountDownController _controller = CountDownController();
-  int duration = 100;
+  int duration = 180;
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 0), () {
+      _controller.restart();
+      _controller.pause();
+    });
+  }
 
+  int index = 0;
   @override
   Widget build(BuildContext context) {
+    //Lista stanów przycisków
+    List views = [
+      Row(children: [
+        _button(
+            title: "Start",
+            onPressed: () {
+              _controller.resume();
+              setState(() {
+                index = 1;
+              });
+            },
+            myicon: Icon(
+              Icons.play_arrow_rounded,
+            )),
+      ]),
+      Row(children: [
+        Expanded(
+          child: SizedBox(),
+          flex: 1,
+        ),
+        _button(
+            title: "Pause",
+            onPressed: () {
+              _controller.pause();
+
+              setState(() {
+                index = 2;
+              });
+            },
+            myicon: Icon(Icons.pause)),
+        _button(
+            title: "Restart",
+            onPressed: () {
+              _controller.restart(duration: duration);
+              _controller.pause();
+              setState(() {
+                index = 0;
+              });
+            },
+            myicon: Icon(Icons.restart_alt)),
+        Expanded(
+          child: SizedBox(),
+          flex: 1,
+        )
+      ]),
+      Row(children: [
+        Expanded(
+          child: SizedBox(),
+          flex: 1,
+        ),
+        _button(
+            title: "Start",
+            onPressed: () {
+              _controller.resume();
+              setState(() {
+                index = 1;
+              });
+            },
+            myicon: Icon(Icons.play_arrow_rounded)),
+        _button(
+            title: "Restart",
+            onPressed: () {
+              setState(() {
+                _controller.restart(duration: duration);
+                _controller.pause();
+                index = 0;
+              });
+            },
+            myicon: Icon(Icons.restart_alt)),
+        Expanded(
+          child: SizedBox(),
+          flex: 1,
+        )
+      ]),
+    ];
+
     return Stack(children: [
       Image.asset('assets/bgimage.png', fit: BoxFit.cover),
       Scaffold(
@@ -69,7 +154,6 @@ class _HomeState extends State<Home> {
                               isReverse: true,
                               autoStart: false,
                               isTimerTextShown: true,
-                              onStart: () {},
                             ),
                           ),
                         ),
@@ -81,37 +165,7 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                Row(children: [
-                  _button(
-                      title: "Start",
-                      onPressed: () {
-                        _controller.resume();
-                      },
-                      myicon: Icon(Icons.play_arrow_rounded)),
-                ]),
-                Row(children: [
-                  Expanded(
-                    child: SizedBox(),
-                    flex: 1,
-                  ),
-                  _button(
-                      title: "Pause",
-                      onPressed: () {
-                        _controller.pause();
-                      },
-                      myicon: Icon(Icons.pause)),
-                  _button(
-                      title: "Restart",
-                      onPressed: () {
-                        _controller.restart(duration: duration);
-                        _controller.pause();
-                      },
-                      myicon: Icon(Icons.restart_alt)),
-                  Expanded(
-                    child: SizedBox(),
-                    flex: 1,
-                  )
-                ]),
+                views[index],
                 Container(
                   height: constraints.maxHeight * 0.1,
                   child: SizedBox(),
@@ -125,13 +179,16 @@ class _HomeState extends State<Home> {
   }
 
   _button(
-      {required String title, VoidCallback? onPressed, required Icon myicon}) {
+      {required String title,
+      VoidCallback? onPressed,
+      required Icon myicon,
+      double size = 40}) {
     return Expanded(
       child: IconButton(
         icon: myicon,
         onPressed: onPressed,
         color: Colors.white,
-        iconSize: 40,
+        iconSize: size,
       ),
       flex: 1,
     );
