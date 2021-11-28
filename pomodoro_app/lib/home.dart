@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   CountDownController _controller = CountDownController();
-  int duration = 190;
+  int duration = 180;
   @override
   void initState() {
     super.initState();
@@ -111,13 +111,19 @@ class _HomeState extends State<Home> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: IconButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final newduration = await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Settings(
                               duration: duration,
                             )));
+                setState(() {
+                  duration = newduration;
+                  _controller.restart(duration: duration);
+                  _controller.pause();
+                  index = 0;
+                });
               },
               icon: Icon(Icons.settings),
             ),
