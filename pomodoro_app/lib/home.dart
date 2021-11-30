@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'settings.dart';
 
 class Home extends StatefulWidget {
@@ -13,6 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   CountDownController _controller = CountDownController();
+  AudioCache player = AudioCache();
   int duration = 180;
   @override
   void initState() {
@@ -163,6 +165,10 @@ class _HomeState extends State<Home> {
                               color: Colors.white,
                               fontFamily: 'Montserrat',
                             ),
+                            onComplete: () {
+                              player.load('Malik.mp3');
+                              player.play('Malik.mp3');
+                            },
                             isReverse: true,
                             autoStart: false,
                             isTimerTextShown: true,
